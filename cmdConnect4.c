@@ -42,13 +42,13 @@ int main (void){
         scanf("%d", &col);
 
         // Add the move to the grid and print if it is illegal
-        if (addMove(grid, col, player) == -1) {
+        if (addMove(grid, col-1, player) == -1) {
             printf("Illegal move\n");
             continue;
         }
 
         // Print the updated game board
-        printf("Updated game board:\n");
+        printf("\nUpdated game board:\n");
         printGrid(grid);
 
         // Check the game status
@@ -62,6 +62,13 @@ int main (void){
 
 // Function to print the game board
 void printGrid(char grid[ROWS][COLS]) {
+    // Print column numbers
+    for(int j = 0; j < COLS; j++) {
+        printf("%d ", j+1);
+    }
+    printf("\n");
+
+    // Print grid
     for(int i = 0; i < ROWS; i++) {
         for(int j = 0; j < COLS; j++) {
             printf("%c ", grid[i][j]);
