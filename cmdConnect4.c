@@ -1,40 +1,72 @@
-/* Julia Ducharme 02/21/24
+/* Julia Ducharme 02/22/24
 
-Takes as input a player's move and the current board and 
-prints if the game is ongoing or if the game has ended.
+Play a game of connect 4 in the terminal. Alternates players, 
+taking moves as input until the game has ended.
 */
 #include <stdio.h>
+#include <string.h>
 
 // Constant variables to make program easily modified
 #define ROWS 6
 #define COLS 7
 
+void printGrid(char grid[ROWS][COLS]); // Prints the game board
 int addMove(char grid[ROWS][COLS], int col, char player); // Adds move to board
 char* checkGameStatus(char grid[ROWS][COLS]); // Checks the game status
 
 int main (void){
-    // Get the move as input
-    char player;
-    int col;
-    scanf(" %c %d", &player, &col);
-
     // Initialize grid filled with .
-    char grid[ROWS][COLS] = {{'.'}};
+    char grid[ROWS][COLS] = {0};
 
-    // Fill the grid with user input
     for(int i = 0; i < ROWS; i++) {
         for(int j = 0; j < COLS; j++) {
-            scanf(" %c", &grid[i][j]);
+            grid[i][j] = '.';
         }
     }
 
-    // Add the move to the grid and print if it is illegal
-    if (addMove(grid, col, player) == -1) {
-        printf("Illegal move\n");
-    } 
-    // Print the game status
-    else {
-        printf("%s\n", checkGameStatus(grid));
+    // Initialize the game status to "Ongoing game"
+    char* gameStatus = "Ongoing game";
+
+    // Initialize the player to 'X'
+    char player = 'X';
+
+    // Print the initial game board
+    printf("Initial game board:\n");
+    printGrid(grid);
+
+    // Game loop
+    while (strcmp(gameStatus, "Ongoing game") == 0) {
+        // Get the move as input
+        int col;
+        printf("Player %c, enter your move (column number): ", player);
+        scanf("%d", &col);
+
+        // Add the move to the grid and print if it is illegal
+        if (addMove(grid, col, player) == -1) {
+            printf("Illegal move\n");
+            continue;
+        }
+
+        // Print the updated game board
+        printf("Updated game board:\n");
+        printGrid(grid);
+
+        // Check the game status
+        gameStatus = checkGameStatus(grid);
+        printf("%s\n", gameStatus);
+
+        // Switch player
+        player = (player == 'X') ? 'O' : 'X';
+    }
+}
+
+// Function to print the game board
+void printGrid(char grid[ROWS][COLS]) {
+    for(int i = 0; i < ROWS; i++) {
+        for(int j = 0; j < COLS; j++) {
+            printf("%c ", grid[i][j]);
+        }
+        printf("\n");
     }
 }
 
